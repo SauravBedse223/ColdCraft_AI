@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cold Email Writer 💼✉️</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --primary-light: #e0e7ff;
+      --success: #10b981;
+      --danger: #ef4444;
+      --dark: #1e293b;
+      --light: #f8fafc;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+      background-image: radial-gradient(#e0e7ff 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    
+    .app-container {
+      max-width: 1000px;
+      padding: 2rem 1.5rem;
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+    }
+    
+    .header-gradient {
+      background: linear-gradient(120deg, #4f46e5, #8b5cf6);
+      padding: 2rem;
+      border-radius: 16px 16px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header-gradient::before {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -100px;
+      right: -50px;
+    }
+    
+    .header-gradient::after {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      bottom: -70px;
+      left: 30px;
+    }
+    
+    .app-title {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .drop-zone {
+      border: 2px dashed #cbd5e0;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background-color: #f8fafc;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .drop-zone:hover {
+      border-color: var(--primary);
+      background-color: #f8fafd;
+    }
+    
+    .drop-zone.active {
+      border-color: var(--primary);
+      background-color: var(--primary-light);
+    }
+    
+    .drop-zone__input {
+      display: none;
+    }
+    
+    .drop-zone__prompt {
+      color: #64748b;
+      transition: transform 0.3s ease;
+    }
+    
+    .drop-zone:hover .drop-zone__prompt {
+      transform: scale(1.05);
+    }
+    
+    .drop-zone__icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+    
+    .drop-zone__thumb {
+      background-color: #f1f5f9;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-top: 1.25rem;
+      display: none;
+      animation: fadeIn 0.5s ease;
+      border: 1px solid #e2e8f0;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .drop-zone__thumb-info {
+      display: flex;
+      align-items: center;
+      font-size: 0.875rem;
+      color: var(--dark);
+    }
+    
+    .drop-zone__thumb-icon {
+      margin-right: 0.75rem;
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+    
+    .textarea-container {
+      position: relative;
+    }
+    
+    .fancy-textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      resize: none;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      background-color: #f8fafc;
+      color: var(--dark);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .fancy-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+      background-color: white;
+    }
+    
+    .textarea-container::after {
+      content: '';
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 50px;
+      height: 50px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5' opacity='0.1'%3E%3Cpath d='M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      pointer-events: none;
+      opacity: 0.1;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.75rem;
+      border-radius: 50px;
+      font-weight: 600;
+      letter-spacing: 0.025em;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+      pointer-events: none;
+    }
+    
+    .loader {
+      display: none;
+      width: 48px;
+      height: 48px;
+      border: 5px solid #e0e7ff;
+      border-bottom-color: var(--primary);
+      border-radius: 50%;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+      margin: 2rem auto;
+    }
+    
+    @keyframes rotation {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loader-text {
+      text-align: center;
+      margin-top: 1rem;
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+    
+    .result-panel {
+      display: none;
+      padding: 1.5rem;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    .success-banner {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .success-icon {
+      background: rgba(255, 255, 255, 0.2);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.75rem;
+      font-size: 1rem;
+    }
+    
+    .email-result {
+      background-color: white;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .email-header {
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .email-title {
+      color: var(--dark);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    
+    .email-title i {
+      margin-right: 0.5rem;
+      color: var(--primary);
+    }
+    
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      color: var(--primary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    
+    .copy-btn:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .copy-btn i {
+      margin-right: 0.5rem;
+    }
+    
+    .email-content {
+      padding: 1.5rem;
+      color: #334155;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      border-radius: 0 0 12px 12px;
+      background-color: #fcfcfc;
+      white-space: pre-wrap;
+      min-height: 200px;
+    }
+    
+    .placeholder {
+      color: #94a3b8;
+      text-align: center;
+      padding: 2rem 0;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: var(--dark);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      transform: translateY(20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 1000;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .toast-icon {
+      margin-right: 0.75rem;
+      background: rgba(255, 255, 255, 0.2);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .footer {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-top: 2rem;
+      position: relative;
+      padding: 1rem;
+    }
+    
+    .footer::before {
+      content: '';
+      height: 1px;
+      width: 50px;
+      background: linear-gradient(to right, transparent, #cbd5e0, transparent);
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .error-message {
+      display: none;
+      background-color: #fef2f2;
+      border-left: 4px solid var(--danger);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      animation: slideDown 0.3s ease;
+    }
+    
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 1rem;
+      }
+      
+      .header-gradient {
+        padding: 1.5rem 1rem;
+      }
+      
+      .drop-zone {
+        padding: 1.5rem 1rem;
+      }
+      
+      .email-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .copy-btn {
+        margin-top: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container mx-auto">
+    <div class="card">
+      <div class="header-gradient">
+        <h1 class="app-title text-white text-2xl md:text-3xl font-bold text-center">ColdCraft AI 💼✉️</h1>
+        <p class="text-white text-opacity-90 text-center mt-1 text-sm md:text-base"> Smart, tailored cold emails in a click.</p>
+      </div>
+      
+      <div class="p-6 md:p-8">
+        <form id="emailForm" class="space-y-6" enctype="multipart/form-data">
+          <div>
+            <label for="resume" class="block text-sm font-medium text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-file-pdf text-indigo-500 mr-2"></i>Upload Resume (PDF)
+            </label>
+            <div class="drop-zone" id="dropZone">
+              <span class="drop-zone__prompt">
+                <i class="fas fa-cloud-upload-alt drop-zone__icon"></i>
+                <p class="font-medium mb-1">Drag & drop your PDF resume</p>
+                <p class="text-sm opacity-75">or click to browse your files</p>
+              </span>
+              <input type="file" name="resume" id="resume" class="drop-zone__input" accept=".pdf" required>
+              <div class="drop-zone__thumb">
+                <div class="drop-zone__thumb-info">
+                  <i class="fas fa-file-pdf drop-zone__thumb-icon"></i>
+                  <span id="filename" class="font-medium">No file selected</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <label for="job_description" class="block text-sm font-medium text-gray-700 mb-3 flex items-center">
+              <i class="fas fa-briefcase text-indigo-500 mr-2"></i>Job Description
+            </label>
+            <div class="textarea-container">
+              <textarea id="job_description" name="job_description" rows="6" class="fancy-textarea" placeholder="Paste the job description here..." required></textarea>
+            </div>
+          </div>
+          
+          <div class="error-message" id="errorMessage">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-0.5">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-red-700" id="errorText">Error message goes here</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex justify-center mt-8">
+            <button type="submit" id="generateButton" class="btn btn-primary">
+              <i class="fas fa-magic mr-2"></i>Generate Email
+            </button>
+          </div>
+        </form>
+        
+        <div class="loader" id="loader"></div>
+        <div class="loader-text" id="loaderText" style="display: none;">Crafting your perfect email...</div>
+        
+        <div class="result-panel" id="result">
+          <div class="success-banner">
+            <div class="success-icon">
+              <i class="fas fa-check"></i>
+            </div>
+            <div>
+              <p class="font-medium">Email generated successfully!</p>
+              <p class="text-sm text-white text-opacity-90">Your personalized cold email is ready to use</p>
+            </div>
+          </div>
+          
+          <div class="email-result">
+            <div class="email-header">
+              <h3 class="email-title">
+                <i class="fas fa-envelope"></i>
+                <span>Generated Email</span>
+              </h3>
+              <button id="copyButton" class="copy-btn">
+                <i class="far fa-copy"></i>Copy to Clipboard
+              </button>
+            </div>
+            <div class="email-content" id="emailOutput">
+              <div class="placeholder">Waiting for result...</div>
+            </div>
+          </div>
+
+          <!-- Updated Email UI HTML -->
+<div class="email-actions mt-6 flex flex-col gap-4">
+  <div class="send-options border rounded-lg p-4 bg-gray-50">
+    <h4 class="text-gray-800 font-medium mb-3">Send Options</h4>
+    
+    <!-- Gmail Compose Button -->
+    <div>
+      <button id="gmailComposeButton" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md flex items-center justify-center">
+        <i class="fab fa-google mr-2"></i>Open in Gmail Compose
+      </button>
+      <p class="text-xs text-gray-500 mt-2">The email will open in Gmail where you can edit it before sending.</p>
+    </div>
+  </div>
+</div>
+
+          
+          
+          <div class="flex justify-center mt-6">
+            <button id="newEmailButton" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
+              <i class="fas fa-redo-alt mr-2"></i>Generate Another Email
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <footer class="footer">
+      <p>Cold Email Writer © 2025 | Powered by FastAPI</p>
+    </footer>
+  </div>
+  
+  <div class="toast" id="toast">
+    <div class="toast-icon">
+      <i class="fas fa-check"></i>
+    </div>
+    <span id="toastMessage">Email copied to clipboard!</span>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Drag and drop file functionality
+      const dropZone = document.getElementById('dropZone');
+      const fileInput = document.getElementById('resume');
+      const filenameDisplay = document.getElementById('filename');
+      const thumbContainer = document.querySelector('.drop-zone__thumb');
+      
+      dropZone.addEventListener('click', () => fileInput.click());
+      
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+          updateThumbnail(fileInput.files[0]);
+        }
+      });
+      
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('active');
+      });
+      
+      ['dragleave', 'dragend'].forEach(type => {
+        dropZone.addEventListener(type, () => {
+          dropZone.classList.remove('active');
+        });
+      });
+      
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('active');
+        
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          updateThumbnail(e.dataTransfer.files[0]);
+        }
+      });
+      
+      function updateThumbnail(file) {
+        if (!file.type.startsWith('application/pdf')) {
+          showError('Please upload a PDF file');
+          return;
+        }
+        
+        thumbContainer.style.display = 'block';
+        filenameDisplay.textContent = file.name;
+      }
+      
+      // Loader text animation
+      const loaderTextOptions = [
+        "Crafting your perfect email...",
+        "Analyzing resume details...",
+        "Matching skills to job description...",
+        "Personalizing your message...",
+        "Almost ready..."
+      ];
+      
+      let loaderTextIndex = 0;
+      let loaderTextInterval;
+      
+      function startLoaderTextAnimation() {
+        const loaderText = document.getElementById('loaderText');
+        loaderText.style.display = 'block';
+        loaderTextInterval = setInterval(() => {
+          loaderText.textContent = loaderTextOptions[loaderTextIndex];
+          loaderTextIndex = (loaderTextIndex + 1) % loaderTextOptions.length;
+        }, 2000);
+      }
+      
+      function stopLoaderTextAnimation() {
+        clearInterval(loaderTextInterval);
+        document.getElementById('loaderText').style.display = 'none';
+      }
+      
+      // Form submission
+      const form = document.getElementById('emailForm');
+      const loader = document.getElementById('loader');
+      const resultPanel = document.getElementById('result');
+      const emailOutput = document.getElementById('emailOutput');
+      const errorMessage = document.getElementById('errorMessage');
+      const errorText = document.getElementById('errorText');
+      const copyButton = document.getElementById('copyButton');
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      const newEmailButton = document.getElementById('newEmailButton');
+      
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Clear previous results and errors
+        hideError();
+        resultPanel.style.display = 'none';
+        
+        // Form validation
+        if (!fileInput.files.length) {
+          showError('Please upload your resume');
+          return;
+        }
+        
+        const jobDescription = document.getElementById('job_description').value.trim();
+        if (!jobDescription) {
+          showError('Please enter the job description');
+          return;
+        }
+        
+        // Show loader
+        form.style.display = 'none';
+        loader.style.display = 'block';
+        startLoaderTextAnimation();
+        
+        // Prepare form data
+        const formData = new FormData(form);
+        
+        try {
+          const response = await fetch('/generate_email/', {
+            method: 'POST',
+            body: formData
+          });
+          
+          if (!response.ok) {
+            throw new Error('API request failed');
+          }
+          
+          const data = await response.json();
+          
+          // Hide loader
+          loader.style.display = 'none';
+          stopLoaderTextAnimation();
+          
+          // Display result
+          emailOutput.textContent = data.email || "Failed to generate email.";
+          resultPanel.style.display = 'block';
+          
+        } catch (error) {
+          console.error('Error:', error);
+          loader.style.display = 'none';
+          stopLoaderTextAnimation();
+          form.style.display = 'block';
+          showError('Failed to generate email. Please try again.');
+        }
+      });
+      
+      // New email button
+      newEmailButton.addEventListener('click', () => {
+        resultPanel.style.display = 'none';
+        form.style.display = 'block';
+      });
+      
+      // Copy to clipboard functionality
+      copyButton.addEventListener('click', () => {
+        const textToCopy = emailOutput.textContent;
+        navigator.clipboard.writeText(textToCopy)
+          .then(() => {
+            showToast('Email copied to clipboard!');
+            copyButton.innerHTML = '<i class="fas fa-check"></i>Copied!';
+            setTimeout(() => {
+              copyButton.innerHTML = '<i class="far fa-copy"></i>Copy to Clipboard';
+            }, 2000);
+          })
+          .catch(err => showToast('Failed to copy email'));
+      });
+      
+      function showError(message) {
+        errorText.textContent = message;
+        errorMessage.style.display = 'block';
+      }
+      
+      function hideError() {
+        errorMessage.style.display = 'none';
+      }
+      
+      function showToast(message) {
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
+      
+      // Textarea auto-resize
+      const textarea = document.getElementById('job_description');
+      textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+      });
+// Gmail Compose Button
+const gmailComposeButton = document.getElementById('gmailComposeButton');
+if (gmailComposeButton) {
+  gmailComposeButton.addEventListener('click', () => {
+    const emailContent = emailOutput.textContent;
+    
+    // Extract subject from the generated email
+    // Assuming the subject is in the first line or after "Subject:" text
+    let subject = '';
+    
+    // Method 1: Check if email has a "Subject:" line
+    const subjectMatch = emailContent.match(/Subject:\s*([^\n]*)/i);
+    if (subjectMatch && subjectMatch[1]) {
+      subject = subjectMatch[1].trim();
+    } 
+    // Method 2: If no explicit subject found, use the first line as subject
+    else {
+      const firstLine = emailContent.split('\n')[0].trim();
+      // Only use first line if it's reasonably short to be a subject
+      if (firstLine && firstLine.length < 100) {
+        subject = firstLine;
+      } else {
+        subject = 'Generated Email'; // Fallback subject
+      }
+    }
+    
+    // Remove subject line from body if it exists to avoid duplication
+    let body = emailContent;
+    if (subjectMatch) {
+      body = body.replace(/Subject:\s*[^\n]*\n/, '');
+    }
+    
+    // Open Gmail compose with extracted subject and body
+    const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(gmailComposeUrl, '_blank');
+  });
+}
+// Enhanced toast function that handles different types of messages
+function showToast(message, type = 'success') {
+  const icon = type === 'success' ? 'check' : 'exclamation-circle';
+  const bgColor = type === 'success' ? '#1e293b' : '#ef4444';
+  
+  toast.style.backgroundColor = bgColor;
+  document.querySelector('.toast-icon i').className = `fas fa-${icon}`;
+  toastMessage.textContent = message;
+  toast.classList.add('show');
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3000);
+}
+
+    });
+  </script>
+</body>
+</html>
