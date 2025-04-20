@@ -21,7 +21,7 @@ ColdCraft AI is an intelligent, web-based application that automatically generat
 
 ## 📷 UI Snapshot
 
-![ColdCraft AI Logo](Screenshot 2025-04-20 132151.png)  
+![ColdCraft AI Logo] (Screenshot 2025-04-20 132151.png)  
 
 
 ## 💡 How It Works
@@ -44,7 +44,7 @@ Then go to `http://127.0.0.1:8000` to use the app.
 
 ## 🤝 Contributions
 
-This project was developed by [Saurav Bedse](https://www.linkedin.com/in/saurav-bedse/).  
+This project was developed by [Saurav Bedse] (https://www.linkedin.com/in/saurav-bedse/).  
 Feel free to fork the repo or raise issues for improvements.
 
 ---
