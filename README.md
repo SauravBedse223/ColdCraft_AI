@@ -21,7 +21,7 @@ ColdCraft AI is an intelligent, web-based application that automatically generat
 
 ## 📷 UI Snapshot
 
-![ColdCraft AI Logo](Screenshot 2025-04-20 132151.png)  
+![ColdCraft AI Logo](Website_Screenshot.png)  
 
 
 ## 💡 How It Works
