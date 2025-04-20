@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 
 load_dotenv()
-genai.configure(api_key="AIzaSyABKjLcBNCLlojiE9JfV3WBjj92Y7_ZfhE")
+genai.configure(api_key="")
 
 def generate_email(resume_text, job_description):
     prompt = f"""
