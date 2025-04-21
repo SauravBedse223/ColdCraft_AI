@@ -12,6 +12,7 @@ def generate_email(resume_text, job_description):
 You are an AI assistant that writes short, professional cold emails for job applications.
 
 Given the resume and job description below, write a crisp email (5-7 lines max) for applying to the job.
+Also you can use bullets points if needed.
 
 --- RESUME ---
 {resume_text}
