@@ -9,7 +9,6 @@ genai.configure(api_key="Your API KEY")
 
 def generate_email(resume_text, job_description):
     prompt = f"""
-You are an AI assistant that writes short, professional cold emails for job applications.
 
 
 --- RESUME ---
